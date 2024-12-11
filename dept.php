@@ -16,6 +16,8 @@ if (!isset($_SESSION["username"])) {
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>USJR - Finals</title>
+    <script src="js/axios.min.js" crossorigin="anonymous"></script>
+    <script src="js/axios.min.js.map" crossorigin="anonymous"></script>
     <style>
         /* Add your existing CSS styles here */
     </style>
@@ -121,21 +123,29 @@ if (!isset($_SESSION["username"])) {
     function confirmDelete(deptid) {
         var confirmDelete = confirm('Are you sure you want to delete?');
         if (confirmDelete) {
-            window.location.href = 'removeDept.php?deptid=' + deptid;
+            // Use axios to make the delete request
+            axios.get('removeDept.php', { params: { deptid: deptid } })
+                .then(response => {
+                    // Optionally reload the page or update the table after successful deletion
+                    alert('Department deleted successfully');
+                    location.reload();  // Reload the page to reflect the changes
+                })
+                .catch(error => {
+                    console.error("Error deleting department:", error);
+                });
         }
     }
 
     function openModal(deptid) {
-        // Use AJAX to fetch edit content
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("updateDept").innerHTML = this.responseText;
+        // Use axios to fetch the department update form content
+        axios.get('updateDept.php', { params: { deptid: deptid } })
+            .then(response => {
+                document.getElementById("updateDept").innerHTML = response.data;
                 document.getElementById("editModal").style.display = "block";
-            }
-        };
-        xhttp.open("GET", "updateDept.php?deptid=" + deptid, true);
-        xhttp.send();
+            })
+            .catch(error => {
+                console.error("Error fetching department data:", error);
+            });
     }
 
     function closeModal() {

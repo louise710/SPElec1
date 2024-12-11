@@ -15,7 +15,9 @@ if (!isset($_SESSION["username"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>USJR - Room Management System</title>
+    <title>USJR - Finals</title>
+    <script src="axios.min.js" crossorigin="anonymous"></script>
+    <script src="axios.min.js.map" crossorigin="anonymous"></script>
     <style>
             #addModal .modal-content {
             margin: 5% auto;
@@ -218,20 +220,29 @@ if (!isset($_SESSION["username"])) {
     function confirmDelete(studid) {
         var confirmDelete = confirm('Are you sure you want to delete?');
         if (confirmDelete) {
-            window.location.href = 'delstudent.php?studid=' + studid;
+            // Use axios to send the delete request
+            axios.get('delstudent.php', { params: { studid: studid } })
+                .then(response => {
+                    // Optionally handle the response if needed
+                    // Redirect if needed
+                    window.location.href = 'delstudent.php?studid=' + studid;
+                })
+                .catch(error => {
+                    console.error("Error deleting student:", error);
+                });
         }
     }
 
     function openModal(studid) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("upstudent").innerHTML = this.responseText;
+        axios.get('upstudent.php', { params: { studid: studid } })
+            .then(response => {
+                // Populate the modal with the response data
+                document.getElementById("upstudent").innerHTML = response.data;
                 document.getElementById("editModal").style.display = "block";
-            }
-        };
-        xhttp.open("GET", "upstudent.php?studid=" + studid, true);
-        xhttp.send();
+            })
+            .catch(error => {
+                console.error("Error fetching student data:", error);
+            });
     }
 
     function closeModal() {
