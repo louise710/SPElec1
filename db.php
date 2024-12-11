@@ -2,7 +2,7 @@
 $host = '127.0.0.1';     
 $dbname = 'usjr'; 
 $username = 'root';      
-$password = 'root';          
+$password = '';          
 
 $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
 
