@@ -30,12 +30,12 @@ if (!isset($_SESSION["username"])) {
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">DEPARTMENT MANAGEMENT</h1>
+                    <h1 class="mt-4">COLLEGE MANAGEMENT</h1>
                     <h1 class="mt-4"></h1>
                     <div class="card mb-4"> 
                         <div class="card-header">
                             <i class="fas fa-table me-1" style="padding: .5%"></i>
-                            <button class="btn btn-success btn-sm" id="addM" onclick="addModal()" style="position: absolute; right: 2%;">Add Department</button>
+                            <button class="btn btn-success btn-sm" id="addM" onclick="addModal()" style="position: absolute; right: 2%;">Add College</button>
                         </div>
                         <div class="card-body">
                             <?php
