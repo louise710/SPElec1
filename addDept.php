@@ -2,6 +2,16 @@
 // Include the database connection
 include 'db.php';
 
+// Fetch the list of colleges to populate the dropdown
+try {
+    $sql = "SELECT collid, collfullname FROM colleges"; // Replace 'colleges' with your actual table name for colleges
+    $stmt = $db->query($sql);
+    $colleges = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+    $colleges = [];
+}
+
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $deptid = $_POST['deptid'];
@@ -23,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Execute the query
         if ($stmt->execute()) {
-            echo "Department added successfully";
+            header("Location: dept.php");
         } else {
             echo "Error: Could not add the department.";
         }
@@ -35,23 +45,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $db = null;
 }
 ?>
-<form action="addDept.php" method="POST">
-<div>
-        <label for="deptid">Department ID</label>
-        <input type="int" name="deptid" required />
-    </div>
-    <div>
-        <label for="deptfullname">Full Name</label>
-        <input type="text" name="deptfullname" required />
-    </div>
-    <div>
-        <label for="deptshortname">Short Name</label>
-        <input type="text" name="deptshortname" required />
-    </div>
-    <div>
-        <!-- dropdown -->
-        <label for="deptcollid">College ID</label> 
-        <input type="text" name="deptcollid" required />
-    </div>
-    <button type="submit">Add Department</button>
-</form>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Department</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: auto;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Add Department</h2>
+    <form action="addDept.php" method="post">
+        <table class="table table-bordered mt-3">
+            <tr>
+                <td><label for="deptid">Department ID:</label></td>
+                <td><input type="number" name="deptid" id="deptid" class="form-control" required></td>
+            </tr>
+
+            <tr>
+                <td><label for="deptfullname">Full Name:</label></td>
+                <td><input type="text" name="deptfullname" id="deptfullname" class="form-control" required></td>
+            </tr>
+            <tr>
+                <td><label for="deptshortname">Short Name:</label></td>
+                <td><input type="text" name="deptshortname" id="deptshortname" class="form-control" required></td>
+            </tr>
+            <tr>
+                <td><label for="deptcollid">College:</label></td>
+                <td>
+                    <select name="deptcollid" id="deptcollid" class="form-control" required>
+                        <option value="">Select a College</option>
+                        <?php foreach ($colleges as $college): ?>
+                            <option value="<?php echo htmlspecialchars($college['collid']); ?>">
+                                <?php echo htmlspecialchars($college['collfullname']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <center><input type="submit" name="add" value="Add Department" class="btn btn-primary"></center>
+    </form>
+</body>
+
+</html>

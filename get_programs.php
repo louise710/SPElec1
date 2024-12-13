@@ -1,26 +1,23 @@
 <?php
 include 'db.php';
 
-if (isset($_GET['college_id']) && isset($_GET['department_id'])) {
-    $collegeId = $_GET['college_id'];
-    $departmentId = $_GET['department_id'];
+header('Content-Type: application/json');
 
-    try {
-        $stmt = $db->prepare("
-            SELECT progid, progfullname 
-            FROM programs 
-            WHERE progcollid = :college_id AND progcolldeptid = :department_id
-        ");
-        $stmt->bindParam(':college_id', $collegeId, PDO::PARAM_INT);
-        $stmt->bindParam(':department_id', $departmentId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $programs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($programs);
-    } catch (PDOException $e) {
-        echo json_encode(["error" => $e->getMessage()]);
-    }
-} else {
-    echo json_encode(["error" => "Missing parameters"]);
+if (!isset($_GET['college_id'])) {
+    echo json_encode(['error' => 'College ID is required']);
+    exit;
 }
-?>
+
+$collegeId = intval($_GET['college_id']);
+
+try {
+    $sql = "SELECT progid, progfullname FROM programs WHERE progcollid = :college_id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':college_id', $collegeId, PDO::PARAM_INT);
+    $stmt->execute();
+    $programs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($programs);
+} catch (PDOException $e) {
+    echo json_encode(['error' => $e->getMessage()]);
+}

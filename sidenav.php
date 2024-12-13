@@ -27,7 +27,7 @@
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-building"></i></div>
                     Departments
                 </a>
-                <a class="nav-link" href="college.php">
+                <a class="nav-link" href="coll.php">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-graduation-cap"></i></div>
                     Colleges
                 </a>

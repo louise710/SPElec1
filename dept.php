@@ -19,8 +19,99 @@ if (!isset($_SESSION["username"])) {
     <script src="js/axios.min.js" crossorigin="anonymous"></script>
     <script src="js/axios.min.js.map" crossorigin="anonymous"></script>
     <style>
-        /* Add your existing CSS styles here */
-    </style>
+            #addModal .modal-content {
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            height: auto;
+            }
+
+            #editModal .modal-content {
+                margin: 5% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 40%;
+                height: auto;
+            }
+
+            .close {
+                color: #aaa;
+                font-size: 28px;
+                font-weight: bold;
+                display: block;
+                margin-left: auto;
+
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            table{
+                border-collapse: collapse;
+                width: 100%;
+                font-family: var(--bs-font-sans-serif);
+                margin-bottom: 5%;
+            }
+            th{
+                background-color: white;
+                color: black;
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: center;
+
+            }
+            tr td{
+                padding: 6px;
+                border: 1px solid #ddd;
+            }
+            tr{
+                text-align: left;
+                text-align: center;
+            }
+            tr:nth-child(even){
+                background-color: #f2f2f2;
+            }
+            tr:hover{
+                background-color: #ddd;
+            }
+            #addM:hover{
+                background-color: #04AA6D;
+                color: white;
+            }
+            .active-button {
+
+            background-color: #04AA6D;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 2px 1px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .inactive-button {
+            background-color: #DC3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 2px 1px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+       
+        </style>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
