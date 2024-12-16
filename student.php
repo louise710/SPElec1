@@ -180,8 +180,6 @@ if (!isset($_SESSION["username"])) {
 
     $db = null;
 ?>
-
-
                     </div>
                     <div id="addModal" class="modal">
                             <div class="modal-content">

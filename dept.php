@@ -139,7 +139,7 @@ if (!isset($_SESSION["username"])) {
                                 $sql = "SELECT * FROM departments";  
                                 $stmt = $db->prepare($sql);  // Prepare the PDO statement
 
-                                $stmt->execute();  // Execute the query
+                                $stmt->execute();  // Execute the query 
 
                                 echo "<table id='datatablesSimple' class='table'>
                                         <thead>  
