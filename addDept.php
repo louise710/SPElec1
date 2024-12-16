@@ -1,10 +1,8 @@
 <?php
-// Include the database connection
 include 'db.php';
 
-// Fetch the list of colleges to populate the dropdown
 try {
-    $sql = "SELECT collid, collfullname FROM colleges"; // Replace 'colleges' with your actual table name for colleges
+    $sql = "SELECT collid, collfullname FROM colleges"; 
     $stmt = $db->query($sql);
     $colleges = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -12,7 +10,6 @@ try {
     $colleges = [];
 }
 
-// Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $deptid = $_POST['deptid'];
     $deptfullname = $_POST['deptfullname'];
@@ -20,18 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $deptcollid = $_POST['deptcollid'];
 
     try {
-        // Prepare the SQL statement to insert the new department
         $sql = "INSERT INTO departments (deptid, deptfullname, deptshortname, deptcollid) 
                 VALUES (:deptid, :deptfullname, :deptshortname, :deptcollid)";
         $stmt = $db->prepare($sql);
 
-        // Bind parameters to the SQL statement
         $stmt->bindParam(':deptid', $deptid, PDO::PARAM_INT);
         $stmt->bindParam(':deptfullname', $deptfullname, PDO::PARAM_STR);
         $stmt->bindParam(':deptshortname', $deptshortname, PDO::PARAM_STR);
         $stmt->bindParam(':deptcollid', $deptcollid, PDO::PARAM_INT);
 
-        // Execute the query
         if ($stmt->execute()) {
             header("Location: dept.php");
         } else {
@@ -41,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Error: " . $e->getMessage();
     }
 
-    // Close the database connection
     $db = null;
 }
 ?>

@@ -2,7 +2,7 @@
 include 'db.php';
 
 try {
-    $sql = "SELECT collid, collfullname FROM colleges"; // Replace 'colleges' with your actual table name for colleges
+    $sql = "SELECT collid, collfullname FROM colleges"; 
     $stmt = $db->query($sql);
     $colleges = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -20,12 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $studyear = $_POST['studyear'];
 
     try {
-        // Prepare the SQL statement to insert the new student
         $sql = "INSERT INTO students (studid, studfirstname, studlastname, studmidname, studcollid, studprogid, studyear) 
                 VALUES (:studid, :studfirstname, :studlastname, :studmidname, :studcollid, :studprogid, :studyear)";
         $stmt = $db->prepare($sql);
 
-        // Bind parameters to the SQL statement
         $stmt->bindParam(':studid', $studid, PDO::PARAM_INT);
         $stmt->bindParam(':studfirstname', $studfirstname, PDO::PARAM_STR);
         $stmt->bindParam(':studlastname', $studlastname, PDO::PARAM_STR);
@@ -34,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':studprogid', $studprogid, PDO::PARAM_INT);
         $stmt->bindParam(':studyear', $studyear, PDO::PARAM_INT);
 
-        // Execute the query
         if ($stmt->execute()) {
             header("Location: student.php");
         } else {
@@ -44,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Error: " . $e->getMessage();
     }
 
-    // Close the database connection
     $db = null;
 }
 ?>
@@ -72,12 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function fetchPrograms(collegeId) {
             const programDropdown = document.getElementById('studprogid');
 
-            // Clear existing options
             programDropdown.innerHTML = '<option value="">-- Select Program --</option>';
 
-            if (!collegeId) return; // Exit if no college is selected
+            if (!collegeId) return; 
 
-            // Fetch programs via Axios
             axios.get(`get_programs.php?college_id=${collegeId}`)
                 .then(response => {
                     const data = response.data;

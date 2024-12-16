@@ -10,7 +10,6 @@ if (isset($_GET['studid'])) {
 
         $stmt->bindParam(':studid', $studid, PDO::PARAM_INT);
 
-        // Execute the query
         if ($stmt->execute()) {
             header("Location: student.php");
         } else {

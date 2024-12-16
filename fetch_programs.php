@@ -11,7 +11,7 @@ if (isset($_GET['collid']) && is_numeric($_GET['collid'])) {
         $stmt->execute();
 
         $programs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($programs); // Return as JSON
+        echo json_encode($programs); 
     } catch (PDOException $e) {
         echo json_encode([]);
     }

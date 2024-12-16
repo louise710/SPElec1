@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Check if user is logged in, if not redirect to login page
 if (!isset($_SESSION["username"])) {
     header("Location: login1.php");
     exit();
@@ -17,8 +16,101 @@ if (!isset($_SESSION["username"])) {
     <meta name="author" content="" />
     <title>USJR - Finals</title>
     <style>
-        /* Add your existing CSS styles here */
-    </style>
+            #addModal .modal-content {
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            height: auto;
+            }
+
+            #editModal .modal-content {
+                margin: 5% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 40%;
+                height: auto;
+            }
+
+            .close {
+                color: #aaa;
+                font-size: 28px;
+                font-weight: bold;
+                display: block;
+                margin-left: auto;
+
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            table{
+                border-collapse: collapse;
+                width: 100%;
+                font-family: var(--bs-font-sans-serif);
+                margin-bottom: 5%;
+            }
+            th{
+                background-color: white;
+                color: black;
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: center;
+
+            }
+            tr td{
+                padding: 6px;
+                border: 1px solid #ddd;
+            }
+            tr{
+                text-align: left;
+                text-align: center;
+            }
+            tr:nth-child(even){
+                background-color: #f2f2f2;
+            }
+            tr:hover{
+                background-color: #ddd;
+            }
+            #addM:hover{
+                background-color: #04AA6D;
+                color: white;
+            }
+            .active-button {
+
+            background-color: #04AA6D;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 2px 1px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .inactive-button {
+            background-color: #DC3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 2px 1px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+       
+        </style>
+    <script src="js/axios.min.js" crossorigin="anonymous"></script>
+    <script src="js/axios.min.js.map" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -39,14 +131,13 @@ if (!isset($_SESSION["username"])) {
                         </div>
                         <div class="card-body">
                             <?php
-                            include 'db.php';  // Include the database connection
+                            include 'db.php';  
 
                             try {
-                                // Query to fetch department data
                                 $sql = "SELECT * FROM colleges";  
-                                $stmt = $db->prepare($sql);  // Prepare the PDO statement
+                                $stmt = $db->prepare($sql); 
 
-                                $stmt->execute();  // Execute the query
+                                $stmt->execute();  
 
                                 echo "<table id='datatablesSimple' class='table'>
                                         <thead>  
@@ -59,7 +150,7 @@ if (!isset($_SESSION["username"])) {
                                         </thead>
                                         <tbody>";
 
-                                // Loop through the result set and display data
+                                
                                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                     echo "<tr>
                                             <td>" . htmlspecialchars($row["collid"] ?? '') . "</td>
@@ -77,21 +168,19 @@ if (!isset($_SESSION["username"])) {
                             } catch (PDOException $e) {
                                 echo "Error: " . $e->getMessage();
                             }
-
-                            // Close the database connection
                             $db = null; 
                             ?>
                         </div>
                         <div id="addModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeAddModal()">&times;</span>
-                                <?php include 'addDept.php'; ?> <!-- Add your department form here -->
+                                <?php include 'addColl.php'; ?> 
                             </div>
                         </div>
                         <div id="editModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeModal()">&times;</span>
-                                <div id="updateDept"></div> <!-- This will display the department update form -->
+                                <div id="updateColl"></div> 
                             </div>
                         </div>
                     </div>
@@ -119,21 +208,27 @@ if (!isset($_SESSION["username"])) {
     function confirmDelete(collid) {
         var confirmDelete = confirm('Are you sure you want to delete?');
         if (confirmDelete) {
-            window.location.href = 'removeDept.php?collid=' + collid;
+            axios.get('removeColl.php', { params: { collid: collid } })
+                .then(response => {
+                    
+                    alert('Department deleted successfully');
+                    location.reload();  
+                })
+                .catch(error => {
+                    console.error("Error deleting department:", error);
+                });
         }
     }
 
     function openModal(collid) {
-        // Use AJAX to fetch edit content
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("updateDept").innerHTML = this.responseText;
+        axios.get('updateColl.php', { params: { collid: collid } })
+            .then(response => {
+                document.getElementById("updateColl").innerHTML = response.data;
                 document.getElementById("editModal").style.display = "block";
-            }
-        };
-        xhttp.open("GET", "updateDept.php?collid=" + collid, true);
-        xhttp.send();
+            })
+            .catch(error => {
+                console.error("Error fetching department data:", error);
+            });
     }
 
     function closeModal() {

@@ -1,10 +1,8 @@
 <?php
-// Include the database connection
 include 'db.php';
 
-// Fetch the list of colleges to populate the dropdown
 try {
-    $sql = "SELECT collid, collfullname FROM colleges"; // Replace 'colleges' with your actual table name for colleges
+    $sql = "SELECT collid, collfullname FROM colleges"; 
     $stmt = $db->query($sql);
     $colleges = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -12,19 +10,16 @@ try {
     $colleges = [];
 }
 
-// Fetch the existing department details if deptid is provided
 $department = null;
 if (isset($_GET['deptid'])) {
     $deptid = $_GET['deptid'];
 
     try {
-        // Prepare the SQL query to fetch department details by deptid
         $sql = "SELECT * FROM departments WHERE deptid = :deptid";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':deptid', $deptid, PDO::PARAM_INT);
         $stmt->execute();
 
-        // Fetch the department data
         $department = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$department) {
@@ -37,7 +32,6 @@ if (isset($_GET['deptid'])) {
     }
 }
 
-// Check if the form is submitted to update the department
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $deptid = $_POST['deptid'];
     $deptfullname = $_POST['deptfullname'];
@@ -45,21 +39,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $deptcollid = $_POST['deptcollid'];
 
     try {
-        // Prepare the SQL statement to update the department
         $sql = "UPDATE departments 
                 SET deptfullname = :deptfullname, deptshortname = :deptshortname, deptcollid = :deptcollid
                 WHERE deptid = :deptid";
         $stmt = $db->prepare($sql);
 
-        // Bind parameters to the SQL statement
         $stmt->bindParam(':deptid', $deptid, PDO::PARAM_INT);
         $stmt->bindParam(':deptfullname', $deptfullname, PDO::PARAM_STR);
         $stmt->bindParam(':deptshortname', $deptshortname, PDO::PARAM_STR);
         $stmt->bindParam(':deptcollid', $deptcollid, PDO::PARAM_INT);
 
-        // Execute the query
         if ($stmt->execute()) {
-            header("Location: dept.php"); // Redirect to department list page after success
+            header("Location: dept.php"); 
             exit;
         } else {
             echo "Error: Could not update the department.";
@@ -68,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Error: " . $e->getMessage();
     }
 
-    // Close the database connection
     $db = null;
 }
 ?>

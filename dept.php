@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Check if user is logged in, if not redirect to login page
 if (!isset($_SESSION["username"])) {
     header("Location: login1.php");
     exit();
@@ -132,14 +131,13 @@ if (!isset($_SESSION["username"])) {
                         </div>
                         <div class="card-body">
                             <?php
-                            include 'db.php';  // Include the database connection
+                            include 'db.php';  
 
                             try {
-                                // Query to fetch department data
                                 $sql = "SELECT * FROM departments";  
-                                $stmt = $db->prepare($sql);  // Prepare the PDO statement
+                                $stmt = $db->prepare($sql);  
 
-                                $stmt->execute();  // Execute the query 
+                                $stmt->execute();  
 
                                 echo "<table id='datatablesSimple' class='table'>
                                         <thead>  
@@ -153,7 +151,7 @@ if (!isset($_SESSION["username"])) {
                                         </thead>
                                         <tbody>";
 
-                                // Loop through the result set and display data
+                               
                                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                     echo "<tr>
                                             <td>" . htmlspecialchars($row["deptid"] ?? '') . "</td>
@@ -173,20 +171,19 @@ if (!isset($_SESSION["username"])) {
                                 echo "Error: " . $e->getMessage();
                             }
 
-                            // Close the database connection
                             $db = null; 
                             ?>
                         </div>
                         <div id="addModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeAddModal()">&times;</span>
-                                <?php include 'addDept.php'; ?> <!-- Add your department form here -->
+                                <?php include 'addDept.php'; ?>
                             </div>
                         </div>
                         <div id="editModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeModal()">&times;</span>
-                                <div id="updateDept"></div> <!-- This will display the department update form -->
+                                <div id="updateDept"></div>
                             </div>
                         </div>
                     </div>
@@ -214,12 +211,10 @@ if (!isset($_SESSION["username"])) {
     function confirmDelete(deptid) {
         var confirmDelete = confirm('Are you sure you want to delete?');
         if (confirmDelete) {
-            // Use axios to make the delete request
             axios.get('removeDept.php', { params: { deptid: deptid } })
                 .then(response => {
-                    // Optionally reload the page or update the table after successful deletion
                     alert('Department deleted successfully');
-                    location.reload();  // Reload the page to reflect the changes
+                    location.reload();  
                 })
                 .catch(error => {
                     console.error("Error deleting department:", error);
@@ -228,7 +223,6 @@ if (!isset($_SESSION["username"])) {
     }
 
     function openModal(deptid) {
-        // Use axios to fetch the department update form content
         axios.get('updateDept.php', { params: { deptid: deptid } })
             .then(response => {
                 document.getElementById("updateDept").innerHTML = response.data;
@@ -243,8 +237,5 @@ if (!isset($_SESSION["username"])) {
         document.getElementById("editModal").style.display = "none";
     }
 </script>
-<!-- date_date_set -->
- <!-- wihdfwi -->
- <!-- xxsas -->
 </body>
 </html>

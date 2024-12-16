@@ -1,10 +1,8 @@
 <?php
 include 'db.php';
 
-// Initialize variables to hold student data
 $student = [];
 
-// Fetch the student details based on the provided `studid`
 if (isset($_GET['studid']) && is_numeric($_GET['studid'])) {
     $studid = intval($_GET['studid']);
 
@@ -28,7 +26,6 @@ if (isset($_GET['studid']) && is_numeric($_GET['studid'])) {
     exit;
 }
 
-// Fetch colleges for the dropdown
 try {
     $sql = "SELECT collid, collfullname FROM colleges";
     $stmt = $db->query($sql);
@@ -41,7 +38,6 @@ try {
 $programs = [];
 if (isset($student['studcollid'])) {
     try {
-        // Corrected query using 'progcollid'
         $sql = "SELECT progid, progfullname FROM programs WHERE progcollid = :collid";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':collid', $student['studcollid'], PDO::PARAM_INT);
@@ -52,7 +48,6 @@ if (isset($student['studcollid'])) {
     }
 }
 
-// Handle the form submission for updating the student
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitize input
     $studfirstname = trim($_POST['studfirstname']);
@@ -62,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $studprogid = intval($_POST['studprogid']);
     $studyear = intval($_POST['studyear']);
 
-    // Validate required fields
     if (empty($studfirstname) || empty($studlastname) || empty($studcollid) || empty($studprogid) || empty($studyear)) {
         echo "Error: All required fields must be filled.";
     } else {
@@ -80,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bindParam(':studid', $studid, PDO::PARAM_INT);
 
             if ($stmt->execute()) {
-                header("Location: student.php"); // Redirect after successful update
+                header("Location: student.php"); 
                 exit;
             } else {
                 echo "Error: Could not update the student.";
@@ -90,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    $db = null; // Close the database connection
+    $db = null; 
 }
 ?>
 
