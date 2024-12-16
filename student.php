@@ -218,11 +218,8 @@ if (!isset($_SESSION["username"])) {
     function confirmDelete(studid) {
         var confirmDelete = confirm('Are you sure you want to delete?');
         if (confirmDelete) {
-            // Use axios to send the delete request
             axios.get('delstudent.php', { params: { studid: studid } })
                 .then(response => {
-                    // Optionally handle the response if needed
-                    // Redirect if needed
                     window.location.href = 'delstudent.php?studid=' + studid;
                 })
                 .catch(error => {
