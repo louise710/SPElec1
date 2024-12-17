@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION["username"])) {
-    header("Location: login1.php");
+    header("Location: login.php");
     exit();
 }
 ?>
@@ -67,6 +67,7 @@ if (!isset($_SESSION["username"])) {
             }
             tr{
                 text-align: left;
+                /* text-align: center; */
             }
             tr:nth-child(even){
                 background-color: #f2f2f2;
@@ -107,7 +108,7 @@ if (!isset($_SESSION["username"])) {
             border-radius: 4px;
         }
        
-        </style>
+        </style>    
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -143,7 +144,7 @@ if (!isset($_SESSION["username"])) {
                                                 <th>Full Name</th>
                                                 <th>Short Name</th>
                                                 <th>College ID</th>
-                                                <th>College Dept ID?</th>
+                                                <th>Dept ID</th>
                                                 <th>Operations</th>
                                             </tr>
                                         </thead>
@@ -175,13 +176,13 @@ if (!isset($_SESSION["username"])) {
                         <div id="addModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeAddModal()">&times;</span>
-                                <?php include 'addDept.php'; ?>
+                                <?php include 'addProg.php'; ?>
                             </div>
                         </div>
                         <div id="editModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeModal()">&times;</span>
-                                <div id="updateDept"></div>
+                                <div id="updateProg"></div>
                             </div>
                         </div>
                     </div>
@@ -209,20 +210,31 @@ if (!isset($_SESSION["username"])) {
     function confirmDelete(progid) {
         var confirmDelete = confirm('Are you sure you want to delete?');
         if (confirmDelete) {
-            window.location.href = 'removeDept.php?progid=' + progid;
+            axios.get('removeColl.php', { params: { progid: progid } })
+                .then(response => {
+                    const result = response.data;
+                    if (result.success) {
+                        alert(result.message);  
+                        location.reload();  
+                    } else {
+                        alert(result.message);  
+                    }
+                })
+                .catch(error => {
+                    console.error("Error deleting College:", error);
+                });
         }
     }
 
     function openModal(progid) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("updateDept").innerHTML = this.responseText;
+        axios.get('updateDept.php', { params: { progid: progid } })
+            .then(response => {
+                document.getElementById("updateDept").innerHTML = response.data;
                 document.getElementById("editModal").style.display = "block";
-            }
-        };
-        xhttp.open("GET", "updateDept.php?progid=" + progid, true);
-        xhttp.send();
+            })
+            .catch(error => {
+                console.error("Error fetching department data:", error);
+            });
     }
 
     function closeModal() {

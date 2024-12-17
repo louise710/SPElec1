@@ -10,7 +10,10 @@ if (!isset($_SESSION['username'])) {
 $username = $_SESSION['username']; 
 ?>
 
-
+<!-- if duplicate ID or username cannot add or update ??
+    add UI dw
+    dl the source code (bs, ax, cdn?) not sure tho
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>

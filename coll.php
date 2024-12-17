@@ -210,12 +210,16 @@ if (!isset($_SESSION["username"])) {
         if (confirmDelete) {
             axios.get('removeColl.php', { params: { collid: collid } })
                 .then(response => {
-                    
-                    alert('Department deleted successfully');
-                    location.reload();  
+                    const result = response.data;
+                    if (result.success) {
+                        alert(result.message);  
+                        location.reload();  
+                    } else {
+                        alert(result.message);  
+                    }
                 })
                 .catch(error => {
-                    console.error("Error deleting department:", error);
+                    console.error("Error deleting College:", error);
                 });
         }
     }

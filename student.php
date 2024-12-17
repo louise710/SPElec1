@@ -213,7 +213,7 @@ if (!isset($_SESSION["username"])) {
     function closeAddModal() {
         document.getElementById("addModal").style.display = "none";
     }
-
+// change this into axios 
     function confirmDelete(studid) {
         var confirmDelete = confirm('Are you sure you want to delete?');
         if (confirmDelete) {
