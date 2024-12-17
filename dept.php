@@ -212,14 +212,20 @@ if (!isset($_SESSION["username"])) {
         if (confirmDelete) {
             axios.get('removeDept.php', { params: { deptid: deptid } })
                 .then(response => {
-                    alert('Department deleted successfully');
-                    location.reload();  
+                    const result = response.data;
+                    if (result.success) {
+                        alert(result.message);  
+                        location.reload();  
+                    } else {
+                        alert(result.message);  
+                    }
                 })
                 .catch(error => {
                     console.error("Error deleting department:", error);
                 });
         }
     }
+
 
     function openModal(deptid) {
         axios.get('updateDept.php', { params: { deptid: deptid } })
