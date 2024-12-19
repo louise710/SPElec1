@@ -24,6 +24,9 @@ $username = $_SESSION['username'];
     <meta name="author" content="" />
     <title>USJR - Finals</title>
     <style>
+            body{
+                background-image: url("assets/img.png");
+            }
             #addModal .modal-content {
             margin: 5% auto;
             padding: 20px;

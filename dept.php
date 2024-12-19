@@ -18,6 +18,9 @@ if (!isset($_SESSION["username"])) {
     <script src="js/axios.min.js" crossorigin="anonymous"></script>
     <script src="js/axios.min.js.map" crossorigin="anonymous"></script>
     <style>
+            body{
+                background-image: url("assets/img.png");
+            }
             #addModal .modal-content {
             margin: 5% auto;
             padding: 20px;

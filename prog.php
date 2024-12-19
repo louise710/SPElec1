@@ -15,7 +15,12 @@ if (!isset($_SESSION["username"])) {
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>USJR - Finals</title>
+    <script src="js/axios.min.js" crossorigin="anonymous"></script>
+    <script src="js/axios.min.js.map" crossorigin="anonymous"></script>
     <style>
+            body{
+                background-image: url("assets/img.png");
+            }
             #addModal .modal-content {
             margin: 5% auto;
             padding: 20px;
@@ -78,6 +83,9 @@ if (!isset($_SESSION["username"])) {
             #addM:hover{
                 background-color: #04AA6D;
                 color: white;
+            }
+            td button {
+                display: absolute;
             }
             .active-button {
 
@@ -210,7 +218,7 @@ if (!isset($_SESSION["username"])) {
     function confirmDelete(progid) {
         var confirmDelete = confirm('Are you sure you want to delete?');
         if (confirmDelete) {
-            axios.get('removeColl.php', { params: { progid: progid } })
+            axios.get('removeProg.php', { params: { progid: progid } })
                 .then(response => {
                     const result = response.data;
                     if (result.success) {
@@ -227,9 +235,9 @@ if (!isset($_SESSION["username"])) {
     }
 
     function openModal(progid) {
-        axios.get('updateDept.php', { params: { progid: progid } })
+        axios.get('updateProg.php', { params: { progid: progid } })
             .then(response => {
-                document.getElementById("updateDept").innerHTML = response.data;
+                document.getElementById("updateProg").innerHTML = response.data;
                 document.getElementById("editModal").style.display = "block";
             })
             .catch(error => {
