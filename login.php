@@ -41,20 +41,100 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            background-image: url("img.png"); 
+            background-repeat: no-repeat;
+            background-size: cover; 
+            background-position: center;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .login-container {
+            width: 250px; 
+            padding: 50px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+            display: grid;
+            justify-items: center;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00ab60;
+            color: #fff;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            margin: 5px 0; 
+            text-align: center;
+            font-size: medium;
+        }
+
+        a {
+            font-size: small;
+            color: black;
+            text-align: center;
+            text-decoration: none; 
+            margin-top: 10px;
+        
+        }
+        p {
+            font-size: small;
+            color: black;
+            text-align: center;
+            text-decoration: none; 
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #009b56;
+        }
+    </style>
+    
 </head>
 <body>
-    <h2>Login</h2>
-    <form method="POST" action="login.php">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        
-        <input type="submit" value="Login">
-        <input type="reset" value="Clear">
-    </form>
+    <div class="login-container">
+        <h2>Login</h2>
+        <?php if (isset($_GET['error']) && $_GET['error'] == '1'): ?>
+                <p style="color: red;">Invalid username or password.</p>
+            <?php endif; ?>
+            <form action="login.php" method="POST">
+                <div class="form-group">
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" placeholder="Password" required autocomplete="off">
+                </div>
+                <button type="submit">Login</button>
+            </form>
 
-    <p>Don't have an account? <a href="register.php">Register here</a></p>
-</body>
+        <p>Don't have an account? <a href="register.php">Register here</a></p>
+        </div>
+    </body>
 </html>
