@@ -17,6 +17,8 @@ if (!isset($_SESSION["username"])) {
     <title>USJR - Finals</title>
     <script src="axios.min.js" crossorigin="anonymous"></script>
     <script src="axios.min.js.map" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.min.js"></script>
     <style>
             body{
                 background-image: url("assets/img.png");
@@ -230,16 +232,50 @@ if (!isset($_SESSION["username"])) {
         }
     }
 
-    function openModal(studid) {
-        axios.get('upstudent.php', { params: { studid: studid } })
-            .then(response => {
-                // Populate the modal with the response data
-                document.getElementById("upstudent").innerHTML = response.data;
-                document.getElementById("editModal").style.display = "block";
-            })
-            .catch(error => {
-                console.error("Error fetching student data:", error);
-            });
+    function confirmDelete(studid) {
+        // Use SweetAlert2 
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to delete this college?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.get('removeColl.php', { params: { studid: studid } })
+                    .then(response => {
+                        const result = response.data;
+                        if (result.success) {
+                            // Show success pop-up
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: result.message,
+                            }).then(() => {
+                                location.reload(); 
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: result.message,
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error deleting College:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'There was a problem deleting the college. Please try again later.',
+                        });
+                    });
+            } else {
+                Swal.fire('Cancelled', 'The college was not deleted.', 'info');
+            }
+        });
     }
 
     function closeModal() {
