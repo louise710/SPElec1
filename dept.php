@@ -17,8 +17,6 @@ if (!isset($_SESSION["username"])) {
     <title>USJR - Finals</title>
     <script src="js/axios.min.js" crossorigin="anonymous"></script>
     <script src="js/axios.min.js.map" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.min.js"></script>
     <style>
             body{
                 background-image: url("assets/img.png");
@@ -203,6 +201,9 @@ if (!isset($_SESSION["username"])) {
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
 <script src="js/datatables-simple-demo.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.min.js"></script>
+
 <script>
     function addModal() {
         document.getElementById("addModal").style.display = "block";
@@ -213,50 +214,49 @@ if (!isset($_SESSION["username"])) {
     }
 
     function confirmDelete(deptid) {
-        // Use SweetAlert2 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'Do you want to delete this college?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axios.get('removeColl.php', { params: { deptid: deptid } })
-                    .then(response => {
-                        const result = response.data;
-                        if (result.success) {
-                            // Show success pop-up
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Deleted!',
-                                text: result.message,
-                            }).then(() => {
-                                location.reload(); 
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: result.message,
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error deleting College:", error);
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to delete this department?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.get('removeDept.php', { params: { deptid: deptid } })
+                .then(response => {
+                    const result = response.data;
+                    if (result.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: result.message,
+                        }).then(() => {
+                            location.reload();  
+                        });
+                    } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
-                            text: 'There was a problem deleting the college. Please try again later.',
+                            title: 'Oops...',
+                            text: result.message,
                         });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error deleting Department:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was a problem deleting the department. Please try again later.',
                     });
-            } else {
-                Swal.fire('Cancelled', 'The college was not deleted.', 'info');
-            }
-        });
-    }
+                });
+        } else {
+            Swal.fire('Cancelled', 'The department was not deleted.', 'info');
+        }
+    });
+}
+
 
 
     function openModal(deptid) {

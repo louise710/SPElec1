@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             justify-content: center;
             align-items: center;
             background-color: #f0f0f0;
-            background-image: url("assets/img.png"); 
+            background-image: url("img.png"); 
             background-repeat: no-repeat;
             background-size: cover; 
             background-position: center;
